@@ -80,11 +80,11 @@ Norsys_Riad_backend/
 └── README.md             # Fichier README du projet
 ```
 ## Contributions
-1-Fork du projet
-2-Créez une nouvelle branche (git checkout -b feature/nouvelle-fonctionnalité)
-3-Committez vos modifications (git commit -am 'Ajout de la nouvelle fonctionnalité')
-4-Push vers la branche (git push origin feature/nouvelle-fonctionnalité)
-5-Créez une Pull Request
+1. Fork du projet
+2. Créez une nouvelle branche (git checkout -b feature/nouvelle-fonctionnalité)
+3. Committez vos modifications (git commit -am 'Ajout de la nouvelle fonctionnalité')
+4. Push vers la branche (git push origin feature/nouvelle-fonctionnalité)
+5. Créez une Pull Request
 
 
 
