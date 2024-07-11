@@ -45,11 +45,13 @@ Pour installer les dépendances du projet, suivez ces étapes :
 ## Configuration
 1. Configurez votre base de données et d'autres paramètres nécessaires dans le fichier .env.
 DATABASE_URL="mysql://username:password@127.0.0.1:3306/database_name"
-2.Exécutez les migrations :
+
+2.  Exécutez les migrations :
 php bin/console doctrine:migrations:migrate
 
 ## Utilisation
 Pour démarrer l'application Symfony localement, exécutez la commande suivante :
+```bash
 symfony serve:start 
 ajouter option -d si vous voulez démarrer le projet en Arrière-plan (symfony serve:start -d)
 
