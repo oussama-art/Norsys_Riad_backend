@@ -47,15 +47,18 @@ Pour installer les dépendances du projet, suivez ces étapes :
 DATABASE_URL="mysql://username:password@127.0.0.1:3306/database_name"
 
 2.  Exécutez les migrations :
+```bash
 php bin/console doctrine:migrations:migrate
 
 ## Utilisation
 Pour démarrer l'application Symfony localement, exécutez la commande suivante :
 ```bash
-symfony serve:start 
+symfony serve:start
+```
 ajouter option -d si vous voulez démarrer le projet en Arrière-plan (symfony serve:start -d)
 
 ## Structure du projet
+```bash
 Norsys_Riad_backend/
 │
 ├── config/               # Fichiers de configuration Symfony
@@ -74,7 +77,7 @@ Norsys_Riad_backend/
 ├── .env.example          # Exemple de fichier .env
 ├── composer.json         # Fichier de configuration Composer
 └── README.md             # Fichier README du projet
-
+```
 ## Contributions
 1-Fork du projet
 2-Créez une nouvelle branche (git checkout -b feature/nouvelle-fonctionnalité)
