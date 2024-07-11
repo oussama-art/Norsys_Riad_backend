@@ -49,6 +49,7 @@ DATABASE_URL="mysql://username:password@127.0.0.1:3306/database_name"
 2.  Exécutez les migrations :
 ```bash
 php bin/console doctrine:migrations:migrate
+```
 
 ## Utilisation
 Pour démarrer l'application Symfony localement, exécutez la commande suivante :
