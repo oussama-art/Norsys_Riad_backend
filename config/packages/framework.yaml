@@ -18,6 +18,11 @@ framework:
     php_errors:
         log: true
 
+    serializer:
+        default_context:
+            json: { enable_max_depth: true }
+
+
 when@test:
     framework:
         test: true
