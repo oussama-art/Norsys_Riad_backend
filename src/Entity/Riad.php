@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\RiadRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: RiadRepository::class)]
 #[ApiResource]
@@ -26,6 +28,14 @@ class Riad
 
     #[ORM\Column(length: 255)]
     private ?string $City = null;
+
+    #[ORM\OneToMany(mappedBy: 'riad', targetEntity: Room::class, orphanRemoval: true)]
+    private Collection $rooms;
+
+    public function __construct()
+    {
+        $this->rooms = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -76,6 +86,36 @@ class Riad
     public function setCity(string $City): static
     {
         $this->City = $City;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Room>
+     */
+    public function getRooms(): Collection
+    {
+        return $this->rooms;
+    }
+
+    public function addRoom(Room $room): static
+    {
+        if (!$this->rooms->contains($room)) {
+            $this->rooms->add($room);
+            $room->setRiad($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRoom(Room $room): static
+    {
+        if ($this->rooms->removeElement($room)) {
+            // set the owning side to null (unless already changed)
+            if ($room->getRiad() === $this) {
+                $room->setRiad(null);
+            }
+        }
 
         return $this;
     }
