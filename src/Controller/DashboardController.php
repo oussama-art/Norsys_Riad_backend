@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractController
 {
-    #[Route('/', name: 'app_dashboard')]
+    #[Route('/dashbroad', name: 'app_dashboard')]
     public function index(): JsonResponse
     {
         return $this->json([

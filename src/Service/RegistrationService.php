@@ -11,13 +11,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class RegistrationService
 {
     private ManagerRegistry $doctrine;
-    private UserPasswordHasherInterface $passwordHasher;
+    private UserPasswordHasherInterface $passwordHarsher;
     private ValidatorInterface $validator;
 
-    public function __construct(ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHarsher, ValidatorInterface $validator)
     {
         $this->doctrine = $doctrine;
-        $this->passwordHasher = $passwordHasher;
+        $this->passwordHarsher = $passwordHarsher;
         $this->validator = $validator;
     }
 
@@ -26,7 +26,7 @@ class RegistrationService
         $em = $this->doctrine->getManager();
 
         $user = new User();
-        $hashedPassword = $this->passwordHasher->hashPassword(
+        $hashedPassword = $this->passwordHarsher->hashPassword(
             $user,
             $plaintextPassword
         );

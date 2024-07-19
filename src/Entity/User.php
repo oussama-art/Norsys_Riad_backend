@@ -5,6 +5,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Dto\ResetPasswordInput;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,21 +20,43 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new Post(),
+        new Put(),
+        new Delete(),
+        new Patch(),
+        new Post(
+            uriTemplate: '/users/reset-password',
+//            controller: ResetPasswordAction::class,
+            security: "is_granted('ROLE_USER')",
+            securityMessage: "Only authenticated users can reset their password.",
+            input: ResetPasswordInput::class,
+            output: User::class,
+            name: 'reset_password'
+        )
+    ],
+    normalizationContext: ['groups' => ['user:read']],
+    denormalizationContext: ['groups' => ['user:write']]
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank(message: 'Email should not be blank.')]
     #[Assert\Email(message: 'The email {{ value }} is not a valid email address.')]
+    #[Groups(['user:read', 'user:write'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank(message: 'Username should not be blank.')]
+    #[Groups(['user:read', 'user:write'])]
     private ?string $username = null;
 
     #[ORM\Column]
@@ -41,22 +69,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).*$/',
         message: 'Your password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
     )]
+    #[Groups(['user:write'])]
     private ?string $password = null;
 
     #[ORM\Column]
+    #[Groups(['user:read', 'user:write'])]
     private array $roles = ['ROLE_USER'];
 
     /**
      * @var Collection<int, Token>
      */
     #[ORM\OneToMany(targetEntity: Token::class, mappedBy: 'user')]
+    #[Groups(['user:read'])]
     private Collection $tokens;
 
-    #[ORM\Column(type: 'integer')]
-    private int $failedLoginAttempts = 0;
-
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $lockoutTime = null;
+    #[Groups(['user:read', 'user:write'])]
+    private ?\DateTimeInterface $loginTime = null;
 
     public function __construct()
     {
@@ -175,31 +204,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getFailedLoginAttempts(): int
+    public function getLoginTime(): ?\DateTimeInterface
     {
-        return $this->failedLoginAttempts;
+        return $this->loginTime;
     }
 
-    public function incrementFailedLoginAttempts(): self
+    public function setLoginTime(?\DateTimeInterface $loginTime): self
     {
-        $this->failedLoginAttempts++;
-        return $this;
-    }
+        $this->loginTime = $loginTime;
 
-    public function resetFailedLoginAttempts(): self
-    {
-        $this->failedLoginAttempts = 0;
-        return $this;
-    }
-
-    public function getLockoutTime(): ?\DateTimeInterface
-    {
-        return $this->lockoutTime;
-    }
-
-    public function setLockoutTime(?\DateTimeInterface $lockoutTime): self
-    {
-        $this->lockoutTime = $lockoutTime;
         return $this;
     }
 }

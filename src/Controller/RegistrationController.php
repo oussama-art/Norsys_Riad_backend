@@ -10,7 +10,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Service\RegistrationService;
 use App\Entity\User;
 
-#[Route('/api', name: 'api_')]
 class RegistrationController extends AbstractController
 {
     private RegistrationService $registrationService;
