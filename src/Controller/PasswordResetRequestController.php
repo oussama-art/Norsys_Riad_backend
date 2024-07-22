@@ -34,16 +34,10 @@ class PasswordResetRequestController extends AbstractController
 
         $email = $data['email'];
 
-        try {
-            // Call the service to request password reset
-            $this->passwordResetService->requestPasswordReset($email);
-        } catch (Exception $e) {
-            // Catch any exceptions and return an error response
-            return $this->json(['message' => 'An error occurred while processing the request.'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
 
-        // Return success message if no errors occurred
-        return $this->json(['message' => 'If this email is registered, you will receive a password reset link.']);
+            // Call the service to request password reset
+        return $this->passwordResetService->requestPasswordReset($email);
+
     }
 
 

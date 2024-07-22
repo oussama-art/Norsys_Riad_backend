@@ -2,48 +2,57 @@
 
 namespace App\Service;
 
+use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Entity\User;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\User;
 
 class RegistrationService
 {
     private ManagerRegistry $doctrine;
-    private UserPasswordHasherInterface $passwordHarsher;
-    private ValidatorInterface $validator;
+    private UserPasswordHasherInterface $passwordHasher;
+    private UserRepository $userRepository;
+    private UserService $userService;
 
-    public function __construct(ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHarsher, ValidatorInterface $validator)
-    {
+    public function __construct(
+        ManagerRegistry $doctrine,
+        UserPasswordHasherInterface $passwordHasher,
+        UserService $userService,
+        UserRepository $userRepository
+    ) {
         $this->doctrine = $doctrine;
-        $this->passwordHarsher = $passwordHarsher;
-        $this->validator = $validator;
+        $this->passwordHasher = $passwordHasher;
+        $this->userRepository = $userRepository;
+        $this->userService = $userService;
     }
 
-    public function registerUser(string $email, string $plaintextPassword, string $username): JsonResponse
+    public function registerUser(array $userData): JsonResponse
     {
         $em = $this->doctrine->getManager();
 
+        if ($this->userRepository->findOneBy(['email' => $userData['email']]) ||
+            $this->userRepository->findOneBy(['username' => $userData['username']])) {
+            return new JsonResponse(['message' => 'User with this email or username already exists'], 400);
+        }
+
         $user = new User();
-        $hashedPassword = $this->passwordHarsher->hashPassword(
+        $user->setEmail($userData['email']);
+        $user->setUsername($userData['username']);
+        $user->setRoles($userData['roles'] ?? []);
+        $user->setPassword($userData['password']);
+
+        $errors = $this->userService->validateUser($user);
+        if (!empty($errors)) {
+            return new JsonResponse($errors, 400);
+        }
+
+        // Hash the password
+        $hashedPassword = $this->passwordHasher->hashPassword(
             $user,
-            $plaintextPassword
+            $userData['password']
         );
         $user->setPassword($hashedPassword);
-        $user->setEmail($email);
-        $user->setUsername($username);
-
-        // Validate the user entity
-        $errors = $this->validator->validate($user);
-
-        if (count($errors) > 0) {
-            $errorsString = '';
-            foreach ($errors as $error) {
-                $errorsString .= $error->getMessage() . ' ';
-            }
-            return new JsonResponse(['message' => trim($errorsString)], 400);
-        }
 
         $em->persist($user);
         $em->flush();
