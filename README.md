@@ -53,6 +53,7 @@ Pour installer les dépendances du projet, suivez ces étapes :
 ```bash
 php bin/console doctrine:migrations:migrate
 ```
+3. Installez OpenSSL pour générer vos clés (publiques et privées), cela vous aidera à générer des JWT.
 
 ## Utilisation
 Pour démarrer l'application Symfony localement, exécutez la commande suivante :
