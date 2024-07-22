@@ -44,9 +44,12 @@ Pour installer les dépendances du projet, suivez ces étapes :
    composer install
 ## Configuration
 1. Configurez votre base de données et d'autres paramètres nécessaires dans le fichier .env.
-DATABASE_URL="mysql://username:password@127.0.0.1:3306/database_name"
+```DATABASE_URL="mysql://username:password@127.0.0.1:3306/database_name"```
 
-2.  Exécutez les migrations :
+Dans cas d'erreur de drive essayez cette configuration :
+```DATABASE_URL="mysql://username:password@127.0.0.1:3306/database_name?serverVersion=10.11.2-MariaDB&charset=utf8mb4"```
+
+3.  Exécutez les migrations :
 ```bash
 php bin/console doctrine:migrations:migrate
 ```
