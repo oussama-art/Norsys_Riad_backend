@@ -1,6 +1,8 @@
 <?php
 // src/Entity/User.php
 
+// src/Entity/User.php
+
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
@@ -17,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use DateTimeInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
@@ -74,7 +77,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'json')]
     #[Assert\NotBlank(message: 'Role should not be blank.')]
-    private array $roles ; // Default role
+    private array $roles;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?DateTimeInterface $lastPasswordChangedAt = null;
 
     /**
      * @var Collection<int, Token>
@@ -145,6 +151,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getLastPasswordChangedAt(): ?DateTimeInterface
+    {
+        return $this->lastPasswordChangedAt;
+    }
+
+    public function setLastPasswordChangedAt(?DateTimeInterface $lastPasswordChangedAt): static
+    {
+        $this->lastPasswordChangedAt = $lastPasswordChangedAt;
+
+        return $this;
+    }
+
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
@@ -156,3 +174,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->tokens;
     }
 }
+

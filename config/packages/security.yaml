@@ -16,15 +16,17 @@ security:
     api:
       pattern: ^/api/
       stateless: true
-      # Configure JSON Login for authentication
-#      json_login:
-#        check_path: /api/login
-#        username_path: username
-#        password_path: password
+      json_login:
+        check_path: /api/login
+        username_path: username
+        password_path: password
 #        success_handler: lexik_jwt_authentication.handler.authentication_success
 #        failure_handler: lexik_jwt_authentication.handler.authentication_failure
       # JWT Authenticator for protected routes
       jwt: ~
+      login_throttling:
+        max_attempts: 5
+        interval: '1 minute'
 
 
     dev:
@@ -34,6 +36,7 @@ security:
     main:
       lazy: true
       provider: app_user_provider
+
 
   access_control:
     - { path: ^/api/register, roles: PUBLIC_ACCESS }
