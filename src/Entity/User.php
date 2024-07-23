@@ -4,6 +4,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,8 +18,26 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(
+            uriTemplate: '/register',
+            controller: 'App\Controller\RegistrationController::index',
+            openapiContext: [
+                'summary' => 'Registers a new user.',
+                'description' => 'Registers a new user with email, username, and password.'
+            ]
+        ),
+
+        new Patch(),
+        new Delete(),
+        new put()
+    ]
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -51,7 +75,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password ;
 
     #[ORM\Column(length: 255)]
-    private string $roles = 'ROLE_USER'; // Default role
+    private array $roles = ['ROLE_USER']; // Default role
 
     /**
      * @var Collection<int, Token>
