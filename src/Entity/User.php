@@ -73,7 +73,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password;
 
     #[ORM\Column(type: 'json')]
-    private array $roles = ['ROLE_USER']; // Default role
+    #[Assert\NotBlank(message: 'Role should not be blank.')]
+    private array $roles ; // Default role
 
     /**
      * @var Collection<int, Token>
