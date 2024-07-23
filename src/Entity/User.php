@@ -18,7 +18,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
     operations: [
@@ -32,10 +31,9 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'description' => 'Registers a new user with email, username, and password.'
             ]
         ),
-
         new Patch(),
         new Delete(),
-        new put()
+        new Put()
     ]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -48,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank(message: 'Email should not be blank.')]
     #[Assert\Email(message: 'The email {{ value }} is not a valid email address.')]
-    private ?string $email ;
+    private ?string $email;
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\Length(
@@ -60,7 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).*$/',
         message: 'Your username must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
     )]
-    private ?string $username ;
+    private ?string $username;
 
     #[ORM\Column]
     #[Assert\NotBlank(message: 'Password should not be blank.')]
@@ -72,9 +70,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).*$/',
         message: 'Your password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
     )]
-    private ?string $password ;
+    private ?string $password;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'json')]
     private array $roles = ['ROLE_USER']; // Default role
 
     /**
@@ -105,7 +103,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
         return $this->username;
     }
@@ -124,16 +122,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        return explode(',', $this->roles);
+        return $this->roles;
     }
 
     public function setRoles(array $roles): static
     {
-        if (count($roles) > 1) {
-            throw new \InvalidArgumentException('Only one role can be assigned to a user.');
-        }
-
-        $this->roles = implode(',', $roles);
+        $this->roles = $roles;
 
         return $this;
     }
@@ -160,5 +154,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->tokens;
     }
-
 }
