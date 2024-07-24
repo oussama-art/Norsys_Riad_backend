@@ -22,13 +22,10 @@ class LoginController extends AbstractController
     public function login(Request $request): JsonResponse
     {
         $credentials = json_decode($request->getContent(), true);
-        $username = $credentials['username'] ?? null;
-        $password = $credentials['password'] ?? null;
 
-        if (!$username || !$password) {
-            return $this->json(['message' => 'Missing username or password'], Response::HTTP_BAD_REQUEST);
-        }
 
-        return $this->loginService->login($username, $password);
+         return $this->loginService->login($credentials);
+
     }
+
 }

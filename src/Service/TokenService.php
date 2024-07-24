@@ -37,7 +37,7 @@ class TokenService
 
     public function invalidateToken(string $token): ?Token
     {
-        $tokenEntity = $this->entityManager->getRepository(Token::class)->findOneBy(['tokenName' => $token]);
+        $tokenEntity = $this->entityManager->getRepository(Token::class)->findOneBy(['token_name' => $token]);
 
         if (!$tokenEntity) {
             return null;
