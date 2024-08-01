@@ -11,6 +11,7 @@ use App\Entity\User;
 use App\Message\Messagetype\SendPasswordChangeConfirmationMessage;
 use App\Message\Messagetype\SendPasswordResetLinkMessage;
 use App\Repository\TokenRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +28,7 @@ class PasswordResetService
     private TokenRepository $tokenRepository;
     private ValidatorInterface $validator;
     private UserPasswordHasherInterface $passwordEncoder;
+    private EntityManagerInterface $entityManager;
 
     public function __construct(
         ManagerRegistry $doctrine,
@@ -35,7 +37,8 @@ class PasswordResetService
         UserPasswordHasherInterface $passwordHasher,
         TokenRepository $tokenRepository,
         ValidatorInterface $validator,
-        UserPasswordHasherInterface $passwordEncoder
+        UserPasswordHasherInterface $passwordEncoder,
+        EntityManagerInterface $entityManager
     )
     {
         $this->doctrine = $doctrine;
@@ -45,6 +48,7 @@ class PasswordResetService
         $this->tokenRepository = $tokenRepository;
         $this->validator = $validator;
         $this->passwordEncoder = $passwordEncoder;
+        $this->entityManager = $entityManager;
     }
 
     public function requestPasswordReset(string $email): JsonResponse
@@ -92,14 +96,12 @@ class PasswordResetService
 
     public function confirmPassword(string $token, ResetPasswordInput $resetPasswordInput): JsonResponse
     {
-        $em = $this->doctrine->getManager();
-        $tokenEntity = $em->getRepository(Token::class)->findOneBy(['token_name' => $token]);
+        $tokenEntity = $this->tokenRepository->findOneBy(['token_name' => $token]);
         if (!$tokenEntity) {
             return new JsonResponse(['message' => 'Invalid token'], Response::HTTP_NOT_FOUND);
         }
 
-        $token = $this->tokenRepository->findOneBy(['token_name' => $token]);
-        if (!$token || $token->isExpired()) {
+        if ($tokenEntity->isExpired()) {
             return new JsonResponse(['message' => 'Invalid or expired token'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -112,13 +114,10 @@ class PasswordResetService
             return new JsonResponse($errorMessages, Response::HTTP_BAD_REQUEST);
         }
 
-        $user = $token->getUser();
+        $user = $tokenEntity->getUser();
 
         // Check if the last password change was within the last 30 days
-        $now = new DateTime();
-        if ($user->getLastPasswordChangedAt() !== null && $now->diff($user->getLastPasswordChangedAt())->days < 30) {
-            return new JsonResponse(['message' => 'You cannot change your password more than once within 30 days'], Response::HTTP_BAD_REQUEST);
-        }
+        
 
         // Check if the current password is valid
         if (!$this->passwordHasher->isPasswordValid($user, $resetPasswordInput->getCurrentPassword())) {
@@ -135,9 +134,25 @@ class PasswordResetService
             return new JsonResponse(['message' => 'New password cannot be the same as the current password'], Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->insert($tokenEntity, $resetPasswordInput->getNewPassword());
+        return $this->updatePassword($tokenEntity, $resetPasswordInput->getNewPassword());
     }
 
+    private function updatePassword(Token $tokenEntity, string $newPassword): JsonResponse
+    {
+        $user = $tokenEntity->getUser();
+        $hashedPassword = $this->passwordHasher->hashPassword($user, $newPassword);
+        $user->setPassword($hashedPassword);
+        $user->setLastPasswordChangedAt(new DateTime()); // Update the last password change date
+
+        $this->entityManager->persist($user);
+
+        $this->entityManager->flush();
+
+//         Dispatch any messages if needed
+        $this->bus->dispatch(new SendPasswordChangeConfirmationMessage($user->getEmail(), $user->getUsername()));
+
+        return new JsonResponse(['message' => 'Password reset successfully'], Response::HTTP_OK);
+    }
     public function insert(Token $tokenEntity, string $newPassword): JsonResponse
     {
         $em = $this->doctrine->getManager();

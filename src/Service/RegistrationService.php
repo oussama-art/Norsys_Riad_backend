@@ -31,6 +31,7 @@ class RegistrationService
     {
         $em = $this->doctrine->getManager();
 
+        // Check if user already exists
         if ($this->userRepository->findOneBy(['email' => $userData['email']]) ||
             $this->userRepository->findOneBy(['username' => $userData['username']])) {
             return new JsonResponse(['message' => 'User with this email or username already exists'], 400);
@@ -39,13 +40,18 @@ class RegistrationService
         $user = new User();
         $user->setEmail($userData['email']);
         $user->setUsername($userData['username']);
-        $user->setRoles($userData['roles'] ?? []);
-        $user->setPassword($userData['password']);
+        $user->setFirstname($userData['firstname']);
+        $user->setSecondname($userData['secondname']);
+        $user->setCin($userData['cin']);
+        $user->setAddress($userData['address']);
+        $user->setTele($userData['tele']);
+        $user->setRoles($userData['roles']?? $user->getRoles());
 
-        $errors = $this->userService->validateUser($user);
-        if (!empty($errors)) {
-            return new JsonResponse($errors, 400);
+        // Validate user data
+        if($userData['password'] != $userData['passwordConfirmation']){
+            return new JsonResponse(['message' => 'Passwords do not match'], 400);
         }
+
 
         // Hash the password
         $hashedPassword = $this->passwordHasher->hashPassword(
@@ -54,6 +60,11 @@ class RegistrationService
         );
         $user->setPassword($hashedPassword);
 
+
+        $errors = $this->userService->validateUser($user);
+        if (!empty($errors)) {
+            return new JsonResponse($errors, 400);
+        }
         $em->persist($user);
         $em->flush();
 

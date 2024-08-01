@@ -27,7 +27,7 @@ class SendPasswordResetLinkMessageHandler
 
     public function __invoke(SendPasswordResetLinkMessage $message): void
     {
-        $resetUrl = $this->urlGenerator->generate('react_password_reset', ['token' => $message->getResetToken()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $resetUrl = $this->urlGenerator->generate('react_password_reset-page', ['token' => $message->getResetToken()], UrlGeneratorInterface::ABSOLUTE_URL);
 
         // Log the generated URL
         $this->logger->info('Generated password reset URL', ['url' => $resetUrl]);
