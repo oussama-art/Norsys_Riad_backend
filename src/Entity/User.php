@@ -1,8 +1,6 @@
 <?php
 // src/Entity/User.php
 
-// src/Entity/User.php
-
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
@@ -54,7 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\Length(
         min: 10,
-        minMessage: 'Your password must be at least {{ limit }} characters long.'
+        minMessage: 'Your username must be at least {{ limit }} characters long.'
     )]
     #[Assert\NotBlank(message: 'Username should not be blank.')]
     #[Assert\Regex(
@@ -76,22 +74,122 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password;
 
     #[ORM\Column(type: 'json')]
-    #[Assert\NotBlank(message: 'Role should not be blank.')]
-    private array $roles;
+    private array $roles = ['ROLE_USER'];
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTimeInterface $lastPasswordChangedAt = null;
 
-    /**
-     * @var Collection<int, Token>
-     */
-    #[ORM\OneToMany(targetEntity: Token::class, mappedBy: 'user')]
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'First name should not be blank.')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'First name cannot be longer than {{ limit }} characters.'
+    )]
+    private ?string $firstname= null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Second name should not be blank.')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Second name cannot be longer than {{ limit }} characters.'
+    )]
+    private ?string $secondname = null;
+
+    #[ORM\Column(length: 20)]
+    #[Assert\NotBlank(message: 'CIN should not be blank.')]
+    #[Assert\Length(
+        max: 20,
+        maxMessage: 'CIN must be at most {{ limit }} characters long.'
+    )]
+    private ?string $cin = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Address should not be blank.')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Address cannot be longer than {{ limit }} characters.'
+    )]
+    private ?string $address = null;
+
+    #[ORM\Column(length: 15)]
+    #[Assert\NotBlank(message: 'Telephone number should not be blank.')]
+    #[Assert\Regex(
+        pattern: '/^\+?\d{10,15}$/',
+        message: 'Telephone number must be between 10 and 15 digits, and can include a leading +.'
+    )]
+    private ?string $tele = null;
+
+    #[ORM\OneToMany(targetEntity: Token::class, mappedBy: 'user', cascade: ['remove'], orphanRemoval: true)]
     private Collection $tokens;
 
     public function __construct()
     {
         $this->tokens = new ArrayCollection();
     }
+
+    // Getter and setter methods for the new properties
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getSecondname(): ?string
+    {
+        return $this->secondname;
+    }
+
+    public function setSecondname(string $secondname): self
+    {
+        $this->secondname = $secondname;
+
+        return $this;
+    }
+
+    public function getCin(): ?string
+    {
+        return $this->cin;
+    }
+
+    public function setCin(string $cin): self
+    {
+        $this->cin = $cin;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getTele(): ?string
+    {
+        return $this->tele;
+    }
+
+    public function setTele(string $tele): self
+    {
+        $this->tele = $tele;
+
+        return $this;
+    }
+
+    // Existing getter and setter methods for other properties...
 
     public function getId(): ?int
     {
@@ -174,4 +272,3 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->tokens;
     }
 }
-

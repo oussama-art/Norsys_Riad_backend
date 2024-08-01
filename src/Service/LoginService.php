@@ -29,7 +29,6 @@ class LoginService
 
     public function login(array $credentials): JsonResponse
     {
-        $em = $this->doctrine->getManager();
         $username = $credentials['username'] ?? null;
         $password = $credentials['password'] ?? null;
 
@@ -44,7 +43,7 @@ class LoginService
         if (!$username || !$password) {
             return new JsonResponse(['message' => 'Missing username or password'], Response::HTTP_BAD_REQUEST);
         }
-        $user = $em->getRepository(User::class)->findOneBy(['username' => $username]);
+        $user = $this->doctrine->getManager()->getRepository(User::class)->findOneBy(['username' => $username]);
 
         if (!$user) {
             return new JsonResponse(['message' => 'User not found', 'status' => 404]);

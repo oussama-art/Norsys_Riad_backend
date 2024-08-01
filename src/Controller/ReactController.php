@@ -22,7 +22,7 @@ class ReactController extends AbstractController
         $this->logger = $logger;
     }
 
-    #[Route('/password-reset/{token}', name: 'react_password_reset', methods: ['GET'])]
+    #[Route('redirect-to-page-reset-password/{token}', name: 'react_password_reset-page', methods: ['GET'])]
     public function resetPassword(string $token): Response
     {
         // Log the received token for debugging

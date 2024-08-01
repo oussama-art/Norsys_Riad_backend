@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class ResetPasswordActionController extends AbstractController
+class UpdatePasswordController extends AbstractController
 {
     private UserPasswordHasherInterface $passwordHasher;
     private ValidatorInterface $validator;
@@ -36,22 +36,27 @@ class ResetPasswordActionController extends AbstractController
         $this->tokenRepository = $tokenRepository;
     }
 
-    #[Route('/update_password', name: 'update-password', methods: ['POST'])]
+    #[Route('/update_authenticated_user_password', name: 'update-password', methods: ['POST'])]
     public function __invoke(Request $request): JsonResponse
     {
-        $credentials = json_decode($request->getContent(), true);
-        $resetPasswordInput = $this->serializer->deserialize($credentials, ResetPasswordInput::class, 'json');
+        $jsonContent = $request->getContent();
+        $resetPasswordInput = $this->serializer->deserialize($jsonContent, ResetPasswordInput::class, 'json');
 
         // Validate the input data
-
+        $errors = $this->validator->validate($resetPasswordInput);
+        if (count($errors) > 0) {
+            $errorMessages = [];
+            foreach ($errors as $error) {
+                $errorMessages[$error->getPropertyPath()][] = $error->getMessage();
+            }
+            return $this->json($errorMessages, Response::HTTP_BAD_REQUEST);
+        }
 
         // Extract the token from the Authorization header
         $authorizationHeader = $request->headers->get('Authorization');
         if (!$authorizationHeader || !preg_match('/Bearer\s(\S+)/', $authorizationHeader, $matches)) {
             return $this->json(['message' => 'Token not provided'], Response::HTTP_UNAUTHORIZED);
         }
-
-
 
         // Encode and set the new password
         return $this->passwordResetService->confirmPassword($matches[1], $resetPasswordInput);
