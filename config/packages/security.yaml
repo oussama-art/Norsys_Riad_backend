@@ -51,4 +51,3 @@ security:
   role_hierarchy:
     ROLE_ADMIN: ROLE_USER  # ROLE_ADMIN includes ROLE_USER permissions
     ROLE_SUPER_ADMIN: ROLE_ADMIN  # ROLE_SUPER_ADMIN includes ROLE_ADMIN permissions
-
