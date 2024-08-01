@@ -2,104 +2,63 @@
 
 namespace App\Controller;
 
-use App\Entity\Token;
-use Doctrine\ORM\EntityManagerInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use App\Dto\UpdatePasswordInput;
+use App\Service\PasswordResetService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use App\Service\PasswordResetService;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-#[Route('/api', name: 'api_')]
 class PasswordResetController extends AbstractController
 {
     private PasswordResetService $passwordResetService;
-    private EntityManagerInterface $entityManager;
+    private SerializerInterface $serializer;
+    private ValidatorInterface $validator;
 
-    public function __construct(PasswordResetService $passwordResetService,EntityManagerInterface $entityManager)
+    public function __construct(SerializerInterface $serializer, PasswordResetService $passwordResetService, ValidatorInterface $validator)
     {
         $this->passwordResetService = $passwordResetService;
-        $this->entityManager = $entityManager;
-    }
-
-    #[Route('/password-reset-request', name: 'password_reset_request', methods: ['POST'])]
-    public function request(Request $request): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-
-        // Validate if email exists in the request data
-        if (empty($data['email'])) {
-            return $this->json(['message' => 'Email is required.'], Response::HTTP_BAD_REQUEST);
-        }
-
-        $email = $data['email'];
-
-        try {
-            // Call the service to request password reset
-            $this->passwordResetService->requestPasswordReset($email);
-        } catch (\Exception $e) {
-            // Catch any exceptions and return an error response
-            return $this->json(['message' => 'An error occurred while processing the request.'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        // Return success message if no errors occurred
-        return $this->json(['message' => 'If this email is registered, you will receive a password reset link.']);
+        $this->serializer = $serializer;
+        $this->validator = $validator;
     }
 
     #[Route('/reset-password', name: 'reset_password', methods: ['POST'])]
-    public function reset(Request $request, EncryptionController $encryptionController): JsonResponse
+    public function reset(Request $request): JsonResponse
     {
-        $token = $request->cookies->get('encrypted_token');
-        $credentials = json_decode($request->getContent(), true);
+        $content = $request->getContent();
 
-        if(empty($token)) {
-            return $this->json(['message' => 'Token is required.']);
+        if (empty($content)) {
+            return $this->json(['message' => 'Request content is empty.'], Response::HTTP_BAD_REQUEST);
         }
 
         try {
-            $decryptedToken = $encryptionController->decryptToken($token);
-        } catch (\Exception $e) {
-            return new JsonResponse(['message' => 'Invalid token'], Response::HTTP_BAD_REQUEST);
+            // Deserialize JSON string into UpdatePasswordInput DTO
+            $updatePasswordInput = $this->serializer->deserialize($content, UpdatePasswordInput::class, 'json');
+        } catch (\Exception) {
+            return $this->json(['message' => 'Invalid data format.'], Response::HTTP_BAD_REQUEST);
         }
 
+        // Retrieve token from cookies
+        $token = $request->cookies->get('token');
 
-        // Extract new password from request data
-        $newPassword = $credentials['password'] ?? null;
-
-        // Validate token and new password presence
-        if (!$decryptedToken || !$newPassword) {
-            return new JsonResponse(['message' => 'Token or password missing'], Response::HTTP_BAD_REQUEST);
+        if (empty($token)) {
+            return $this->json(['message' => 'Token is required.'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Retrieve token entity from repository
-        $tokenEntity = $this->entityManager->getRepository(Token::class)->findOneBy(['token_name' => $decryptedToken]);
-
-        // Check if token entity exists
-        if (!$tokenEntity) {
-            return new JsonResponse(['message' => 'Invalid token'], Response::HTTP_NOT_FOUND);
+        // Validate the password input using the Validator component
+        $errors = $this->validator->validate($updatePasswordInput);
+        if (count($errors) > 0) {
+            $errorMessages = [];
+            foreach ($errors as $error) {
+                $errorMessages[] = $error->getMessage();
+            }
+            return $this->json(['message' => $errorMessages], Response::HTTP_BAD_REQUEST);
         }
 
-        // Check if token is expired
-        if ($tokenEntity->isExpired()) {
-            return new JsonResponse(['message' => 'Token expired'], Response::HTTP_BAD_REQUEST);
-        }
-
-        // Retrieve user associated with the token
-        $user = $tokenEntity->getUser();
-
-        // Reset the user's password
-        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-        $user->setPassword($hashedPassword);
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
-
-        // Remove the token from the database after successful password reset
-        $this->entityManager->remove($tokenEntity);
-        $this->entityManager->flush();
-
-        // Return success response
-        return new JsonResponse(['message' => 'Password reset successfully'], Response::HTTP_OK);
+        // Use the service to reset the password
+        return $this->passwordResetService->resetPassword($token, $updatePasswordInput);
     }
 }

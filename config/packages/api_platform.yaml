@@ -5,8 +5,9 @@ api_platform:
         jsonld: ['application/ld+json']
         json: ['application/json'] # Optionally, add support for plain JSON
         multipart: ['multipart/form-data'] # Add this line
+        jsonld: ['application/json']
     docs_formats:
-        jsonld: ['application/ld+json']
+        jsonld: ['application/json']
         jsonopenapi: ['application/vnd.openapi+json']
         html: ['text/html']
     defaults:
