@@ -42,4 +42,4 @@ security:
         - { path: ^/api/password-reset-request, roles: PUBLIC_ACCESS }
         - { path: ^/api/decrypt-token, roles: PUBLIC_ACCESS }
         - { path: ^/api/reset-password, roles: PUBLIC_ACCESS }
-        - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
+        #- { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
