@@ -5,15 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ab4aced6-a985-4d81-a677-7863718ed4fc" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/phpspec.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/phpspec.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/controllers.json" beforeDir="false" afterPath="$PROJECT_DIR$/assets/controllers.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/api_platform.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/api_platform.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ReactController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ReactController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ResetPasswordActionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UpdatePasswordController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Token.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Token.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/vich_uploader.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/vich_uploader.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/services.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20240723104047.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20240723132514.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20240724101305.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20240724112023.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20240725141026.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20240729161348.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/RoomController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RoomController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/RoomImageController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RoomImageController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TokenController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TokenController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Riad.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Riad.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Room.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Room.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/RoomImage.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/RoomImage.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Message/MessageHandler/SendPasswordResetLinkMessageHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Message/MessageHandler/SendPasswordResetLinkMessageHandler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/LoginService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/LoginService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/PasswordResetService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/PasswordResetService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/MessageRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/RiadRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/RoomImageRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/RoomRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/TokenRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/UserRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/Admin/AdminService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/Admin/AdminService.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Service/RegistrationService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/RegistrationService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/translations/.gitignore" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,6 +199,7 @@
       <path value="$PROJECT_DIR$/vendor/symfony/mercure-bundle" />
       <path value="$PROJECT_DIR$/vendor/symfony/rate-limiter" />
       <path value="$PROJECT_DIR$/vendor/symfony/mercure" />
+      <path value="$PROJECT_DIR$/vendor/vich/uploader-bundle" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -185,20 +210,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat__Update-password__c/0GwuKsqS&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Oussama/Desktop/riad/upload image/Norsys_Riad_backend&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "sprint__1",
+    "last_opened_file_path": "C:/Users/Oussama/Desktop/riad/upload image/Norsys_Riad_backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected="PHPUnit.Main">
+}]]></component>
+  <component name="RunManager">
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml.dist" scope="XML" use_alternative_configuration_file="true" />
       <method v="2" />
@@ -225,7 +250,9 @@
       <workItem from="1721900762125" duration="30364000" />
       <workItem from="1722249201209" duration="13160000" />
       <workItem from="1722420576278" duration="9550000" />
-      <workItem from="1722500590400" duration="6108000" />
+      <workItem from="1722500590400" duration="19263000" />
+      <workItem from="1722548594394" duration="59084000" />
+      <workItem from="1722784026206" duration="28549000" />
     </task>
     <servers />
   </component>

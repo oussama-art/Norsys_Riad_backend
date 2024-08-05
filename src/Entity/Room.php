@@ -1,5 +1,6 @@
 <?php
 // src/Entity/Room.php
+
 namespace App\Entity;
 
 use App\Repository\RoomRepository;
@@ -21,15 +22,15 @@ class Room
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['room:read', 'room:write'])]
+    #[Groups(['room:read', 'room:write', 'riad:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['room:read', 'room:write'])]
+    #[Groups(['room:read', 'room:write', 'riad:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: 'text')]
-    #[Groups(['room:read', 'room:write'])]
+    #[Groups(['room:read', 'room:write', 'riad:read'])]
     private ?string $description = null;
 
     #[ORM\Column(type: 'integer')]
@@ -42,7 +43,7 @@ class Room
 
     #[ORM\ManyToOne(targetEntity: Riad::class, inversedBy: 'rooms')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['room:read', 'room:write'])]
+    #[Groups(['room:read'])]
     private ?Riad $riad = null;
 
     #[ORM\OneToMany(targetEntity: RoomImage::class, mappedBy: 'room', cascade: ['persist', 'remove'])]

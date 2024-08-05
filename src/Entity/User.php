@@ -34,7 +34,14 @@ use DateTimeInterface;
         ),
         new Patch(),
         new Delete(),
-        new Put()
+        new Put(
+            uriTemplate: '/users/{id}',
+            controller: 'App\Controller\UpdateUserController::__invoke',
+            openapiContext: [
+                'summary' => 'Updates an existing user.',
+                'description' => 'Updates an existing user based on the provided data.'
+            ]
+        )
     ]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface

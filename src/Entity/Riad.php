@@ -7,34 +7,49 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RiadRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['riad:read']],
+    denormalizationContext: ['groups' => ['riad:write']]
+)]
 class Riad
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['riad:read', 'riad:write'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['riad:read', 'riad:write'])]
     private ?string $name = null;
 
     #[ORM\Column(type: 'text')]
-    private ?string $Description = null;
+    #[Groups(['riad:read', 'riad:write'])]
+    private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Address = null;
+    #[Groups(['riad:read', 'riad:write'])]
+    private ?string $address = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $City = null;
+    #[Groups(['riad:read', 'riad:write'])]
+    private ?string $city = null;
 
-    #[ORM\OneToMany(mappedBy: 'riad', targetEntity: Room::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Room::class, mappedBy: 'riad', orphanRemoval: true)]
+    #[Groups(['riad:read'])]
     private Collection $rooms;
+
+    #[ORM\OneToMany(targetEntity: RiadImage::class, mappedBy: 'riad', orphanRemoval: true)]
+    #[Groups(['riad:read'])]
+    private Collection $images;
 
     public function __construct()
     {
         $this->rooms = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -56,36 +71,36 @@ class Riad
 
     public function getDescription(): ?string
     {
-        return $this->Description;
+        return $this->description;
     }
 
-    public function setDescription(string $Description): static
+    public function setDescription(string $description): static
     {
-        $this->Description = $Description;
+        $this->description = $description;
 
         return $this;
     }
 
     public function getAddress(): ?string
     {
-        return $this->Address;
+        return $this->address;
     }
 
-    public function setAddress(string $Address): static
+    public function setAddress(string $address): static
     {
-        $this->Address = $Address;
+        $this->address = $address;
 
         return $this;
     }
 
     public function getCity(): ?string
     {
-        return $this->City;
+        return $this->city;
     }
 
-    public function setCity(string $City): static
+    public function setCity(string $city): static
     {
-        $this->City = $City;
+        $this->city = $city;
 
         return $this;
     }
@@ -114,6 +129,36 @@ class Riad
             // set the owning side to null (unless already changed)
             if ($room->getRiad() === $this) {
                 $room->setRiad(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RiadImage>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(RiadImage $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setRiad($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(RiadImage $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getRiad() === $this) {
+                $image->setRiad(null);
             }
         }
 

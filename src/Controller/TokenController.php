@@ -1,29 +1,26 @@
 <?php
-
 // src/Controller/TokenController.php
 
 namespace App\Controller;
 
-use App\Repository\TokenRepository;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
 
 class TokenController extends AbstractController
 {
     private TokenStorageInterface $tokenStorage;
-    private TokenRepository $tokenRepository;
+    private JWTTokenManagerInterface $jwtManager;
 
-    public function __construct(TokenStorageInterface $tokenStorage, TokenRepository $tokenRepository)
+    public function __construct(TokenStorageInterface $tokenStorage, JWTTokenManagerInterface $jwtManager)
     {
         $this->tokenStorage = $tokenStorage;
-        $this->tokenRepository = $tokenRepository;
+        $this->jwtManager = $jwtManager;
     }
 
     #[Route('/validate-token', name: 'validate_token', methods: ['POST'])]
@@ -32,37 +29,24 @@ class TokenController extends AbstractController
         $authorizationHeader = $request->headers->get('Authorization');
         $admin = $request->request->get('admin', false);
 
-        if (!$authorizationHeader) {
+        if (!$authorizationHeader || !str_starts_with($authorizationHeader, 'Bearer ')) {
             return new JsonResponse(['valid' => false, 'role' => null], 401);
         }
 
+        $tokenString = substr($authorizationHeader, 7); // Extract token after 'Bearer '
+
         try {
-            $token = $this->tokenStorage->getToken();
+            $payload = $this->jwtManager->parse($tokenString);
 
-            if ($token instanceof TokenInterface) {
-                $user = $token->getUser();
+            $roles = $payload['roles'] ?? [];
+            $isAdmin = in_array('ROLE_ADMIN', $roles, true);
 
-                // Ensure the user is authenticated and not an anonymous user
-                if ($user instanceof UserInterface) {
-                    // Extract roles, assuming $user->getRoles() returns an array of roles
-                    $roles = $user->getRoles();
-
-                    // Check if the user has an admin role
-                    $isAdmin = in_array('ROLE_ADMIN', $roles, true);
-
-                    // Determine if the request is for admin validation and the user is not an admin
-                    if ($admin && !$isAdmin) {
-                        return new JsonResponse(['valid' => false, 'role' => 'ROLE_USER'], 403);
-                    }
-
-                    return new JsonResponse(['valid' => true, 'role' => $isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER'], 200);
-                } else {
-                    return new JsonResponse(['valid' => false, 'role' => null], 401);
-                }
-            } else {
-                return new JsonResponse(['valid' => false, 'role' => null], 401);
+            if ($admin && !$isAdmin) {
+                return new JsonResponse(['valid' => false, 'role' => 'ROLE_USER'], 403);
             }
-        } catch (AuthenticationException $e) {
+
+            return new JsonResponse(['valid' => true, 'role' => $isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER'], 200);
+        } catch (JWTDecodeFailureException $e) {
             return new JsonResponse(['valid' => false, 'role' => null], 401);
         }
     }
@@ -78,14 +62,15 @@ class TokenController extends AbstractController
 
         $user = $token->getUser();
 
-        // Customize the response to include only necessary details
-        $userData = [
-            'id' => $user->getId(),
-            'username' => $user->getUsername(),
-            'email' => $user->getEmail(),
-            // Add other user details as needed
-        ];
+        if (method_exists($user, 'getId') && method_exists($user, 'getUsername') && method_exists($user, 'getEmail')) {
+            $userData = [
+                'id' => $user->getId(),
+                'username' => $user->getUsername(),
+                'email' => $user->getEmail(),
+            ];
+            return new JsonResponse($userData);
+        }
 
-        return new JsonResponse($userData);
+        return new JsonResponse(['error' => 'User data is incomplete or invalid'], 400);
     }
 }
