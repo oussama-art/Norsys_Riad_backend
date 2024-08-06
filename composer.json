@@ -73,6 +73,8 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "App\\": "src/",
+            "DoctrineMigrations\\": "src/Migrations/",
             "App\\Tests\\": "tests/"
         }
     },

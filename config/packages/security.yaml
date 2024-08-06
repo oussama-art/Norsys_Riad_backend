@@ -48,6 +48,7 @@ security:
     - { path: ^/api/admin/login, roles: PUBLIC_ACCESS }
     - { path: ^/api/riads, roles: PUBLIC_ACCESS }
     - { path: ^/api/rooms, roles: PUBLIC_ACCESS }
+    - { path: ^/api/reservations, roles:  PUBLIC_ACCESS  }
     - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
 
   role_hierarchy:

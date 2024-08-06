@@ -50,6 +50,20 @@ class Room
     #[Groups(['room:read'])]
     private Collection $images;
 
+    #[ORM\OneToOne(targetEntity: Reservation::class, mappedBy: 'room', cascade: ['persist', 'remove'])]
+    #[Groups(['room:read'])]
+    private ?Reservation $reservation = null;
+
+    public function getReservation(): ?Reservation
+    {
+        return $this->reservation;
+    }
+
+    public function setReservation(?Reservation $reservation): void
+    {
+        $this->reservation = $reservation;
+    }
+
     public function __construct()
     {
         $this->images = new ArrayCollection();

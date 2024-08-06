@@ -129,6 +129,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Token::class, mappedBy: 'user', cascade: ['remove'], orphanRemoval: true)]
     private Collection $tokens;
 
+    #[ORM\OneToOne(targetEntity: Reservation::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Reservation $reservation = null;
+
+    public function getReservation(): ?Reservation
+    {
+        return $this->reservation;
+    }
+
+    public function setReservation(?Reservation $reservation): void
+    {
+        $this->reservation = $reservation;
+    }
+
     public function __construct()
     {
         $this->tokens = new ArrayCollection();
