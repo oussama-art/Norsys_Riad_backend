@@ -26,7 +26,7 @@ use DateTimeInterface;
         new GetCollection(),
         new Post(
             uriTemplate: '/register',
-            controller: 'App\Controller\RegistrationController::index',
+            controller: 'App\Controller\Auth\RegistrationController::index',
             openapiContext: [
                 'summary' => 'Registers a new user.',
                 'description' => 'Registers a new user with email, username, and password.'
@@ -36,7 +36,7 @@ use DateTimeInterface;
         new Delete(),
         new Put(
             uriTemplate: '/users/{id}',
-            controller: 'App\Controller\UpdateUserController::__invoke',
+            controller: 'App\Controller\User\UpdateUserController::__invoke',
             openapiContext: [
                 'summary' => 'Updates an existing user.',
                 'description' => 'Updates an existing user based on the provided data.'

@@ -1,4 +1,5 @@
 <?php
+// src/Entity/Riad.php
 
 namespace App\Entity;
 
@@ -8,6 +9,7 @@ use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RiadRepository::class)]
 #[ApiResource(
@@ -24,18 +26,25 @@ class Riad
 
     #[ORM\Column(length: 255)]
     #[Groups(['riad:read', 'riad:write'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $name = null;
 
     #[ORM\Column(type: 'text')]
     #[Groups(['riad:read', 'riad:write'])]
+    #[Assert\NotBlank]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['riad:read', 'riad:write'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $address = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['riad:read', 'riad:write'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $city = null;
 
     #[ORM\OneToMany(targetEntity: Room::class, mappedBy: 'riad', orphanRemoval: true)]
@@ -52,6 +61,8 @@ class Riad
         $this->images = new ArrayCollection();
     }
 
+    // Getter and setter methods...
+
     public function getId(): ?int
     {
         return $this->id;
@@ -62,7 +73,7 @@ class Riad
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -74,7 +85,7 @@ class Riad
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -86,7 +97,7 @@ class Riad
         return $this->address;
     }
 
-    public function setAddress(string $address): static
+    public function setAddress(string $address): self
     {
         $this->address = $address;
 
@@ -98,7 +109,7 @@ class Riad
         return $this->city;
     }
 
-    public function setCity(string $city): static
+    public function setCity(string $city): self
     {
         $this->city = $city;
 
@@ -113,7 +124,7 @@ class Riad
         return $this->rooms;
     }
 
-    public function addRoom(Room $room): static
+    public function addRoom(Room $room): self
     {
         if (!$this->rooms->contains($room)) {
             $this->rooms->add($room);
@@ -123,7 +134,7 @@ class Riad
         return $this;
     }
 
-    public function removeRoom(Room $room): static
+    public function removeRoom(Room $room): self
     {
         if ($this->rooms->removeElement($room)) {
             // set the owning side to null (unless already changed)
@@ -143,7 +154,7 @@ class Riad
         return $this->images;
     }
 
-    public function addImage(RiadImage $image): static
+    public function addImage(RiadImage $image): self
     {
         if (!$this->images->contains($image)) {
             $this->images->add($image);
@@ -153,7 +164,7 @@ class Riad
         return $this;
     }
 
-    public function removeImage(RiadImage $image): static
+    public function removeImage(RiadImage $image): self
     {
         if ($this->images->removeElement($image)) {
             // set the owning side to null (unless already changed)
@@ -165,3 +176,4 @@ class Riad
         return $this;
     }
 }
+
