@@ -1,10 +1,15 @@
 <?php
-
 // src/Entity/User.php
 
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,9 +17,26 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use DateTimeInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(
+            uriTemplate: '/register',
+            controller: 'App\Controller\RegistrationController::index',
+            openapiContext: [
+                'summary' => 'Registers a new user.',
+                'description' => 'Registers a new user with email, username, and password.'
+            ]
+        ),
+        new Patch(),
+        new Delete(),
+        new Put()
+    ]
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -25,11 +47,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank(message: 'Email should not be blank.')]
     #[Assert\Email(message: 'The email {{ value }} is not a valid email address.')]
-    private ?string $email = null;
+    private ?string $email;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\Length(
+        min: 10,
+        minMessage: 'Your username must be at least {{ limit }} characters long.'
+    )]
     #[Assert\NotBlank(message: 'Username should not be blank.')]
-    private ?string $username = null;
+    #[Assert\Regex(
+        pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).*$/',
+        message: 'Your username must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
+    )]
+    private ?string $username;
 
     #[ORM\Column]
     #[Assert\NotBlank(message: 'Password should not be blank.')]
@@ -41,27 +71,125 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).*$/',
         message: 'Your password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
     )]
-    private ?string $password = null;
+    private ?string $password;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'json')]
     private array $roles = ['ROLE_USER'];
 
-    /**
-     * @var Collection<int, Token>
-     */
-    #[ORM\OneToMany(targetEntity: Token::class, mappedBy: 'user')]
-    private Collection $tokens;
-
-    #[ORM\Column(type: 'integer')]
-    private int $failedLoginAttempts = 0;
-
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $lockoutTime = null;
+    private ?DateTimeInterface $lastPasswordChangedAt = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'First name should not be blank.')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'First name cannot be longer than {{ limit }} characters.'
+    )]
+    private ?string $firstname= null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Second name should not be blank.')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Second name cannot be longer than {{ limit }} characters.'
+    )]
+    private ?string $secondname = null;
+
+    #[ORM\Column(length: 20)]
+    #[Assert\NotBlank(message: 'CIN should not be blank.')]
+    #[Assert\Length(
+        max: 20,
+        maxMessage: 'CIN must be at most {{ limit }} characters long.'
+    )]
+    private ?string $cin = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Address should not be blank.')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Address cannot be longer than {{ limit }} characters.'
+    )]
+    private ?string $address = null;
+
+    #[ORM\Column(length: 15)]
+    #[Assert\NotBlank(message: 'Telephone number should not be blank.')]
+    #[Assert\Regex(
+        pattern: '/^\+?\d{10,15}$/',
+        message: 'Telephone number must be between 10 and 15 digits, and can include a leading +.'
+    )]
+    private ?string $tele = null;
+
+    #[ORM\OneToMany(targetEntity: Token::class, mappedBy: 'user', cascade: ['remove'], orphanRemoval: true)]
+    private Collection $tokens;
 
     public function __construct()
     {
         $this->tokens = new ArrayCollection();
     }
+
+    // Getter and setter methods for the new properties
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getSecondname(): ?string
+    {
+        return $this->secondname;
+    }
+
+    public function setSecondname(string $secondname): self
+    {
+        $this->secondname = $secondname;
+
+        return $this;
+    }
+
+    public function getCin(): ?string
+    {
+        return $this->cin;
+    }
+
+    public function setCin(string $cin): self
+    {
+        $this->cin = $cin;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getTele(): ?string
+    {
+        return $this->tele;
+    }
+
+    public function setTele(string $tele): self
+    {
+        $this->tele = $tele;
+
+        return $this;
+    }
+
+    // Existing getter and setter methods for other properties...
 
     public function getId(): ?int
     {
@@ -80,7 +208,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
         return $this->username;
     }
@@ -92,26 +220,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return $this->roles;
     }
 
     public function setRoles(array $roles): static
@@ -121,9 +237,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): string
     {
         return $this->password;
@@ -136,70 +249,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
+    public function getLastPasswordChangedAt(): ?DateTimeInterface
+    {
+        return $this->lastPasswordChangedAt;
+    }
+
+    public function setLastPasswordChangedAt(?DateTimeInterface $lastPasswordChangedAt): static
+    {
+        $this->lastPasswordChangedAt = $lastPasswordChangedAt;
+
+        return $this;
+    }
+
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection<int, Token>
-     */
     public function getTokens(): Collection
     {
         return $this->tokens;
-    }
-
-    public function addToken(Token $token): static
-    {
-        if (!$this->tokens->contains($token)) {
-            $this->tokens->add($token);
-            $token->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeToken(Token $token): static
-    {
-        if ($this->tokens->removeElement($token)) {
-            // set the owning side to null (unless already changed)
-            if ($token->getUser() === $this) {
-                $token->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getFailedLoginAttempts(): int
-    {
-        return $this->failedLoginAttempts;
-    }
-
-    public function incrementFailedLoginAttempts(): self
-    {
-        $this->failedLoginAttempts++;
-        return $this;
-    }
-
-    public function resetFailedLoginAttempts(): self
-    {
-        $this->failedLoginAttempts = 0;
-        return $this;
-    }
-
-    public function getLockoutTime(): ?\DateTimeInterface
-    {
-        return $this->lockoutTime;
-    }
-
-    public function setLockoutTime(?\DateTimeInterface $lockoutTime): self
-    {
-        $this->lockoutTime = $lockoutTime;
-        return $this;
     }
 }

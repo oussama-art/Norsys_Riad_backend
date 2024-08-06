@@ -1,0 +1,11 @@
+# config/packages/vich_uploader.yaml
+vich_uploader:
+    db_driver: orm
+    mappings:
+        room_images:
+            uri_prefix: /images/rooms
+            upload_destination: '%kernel.project_dir%/public/images/rooms'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true

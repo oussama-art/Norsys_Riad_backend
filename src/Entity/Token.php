@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TokenRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TokenRepository::class)]
+#[ApiResource()]
+
 class Token
 {
     #[ORM\Id]

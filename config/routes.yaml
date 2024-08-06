@@ -3,21 +3,5 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
-
-
-reset_password:
-    path: /api/reset-password
-    controller: App\Controller\PasswordResetController::reset
-    methods: [POST]
-
-# config/routes.yaml
-react_password_reset:
-    path: /password-reset/{token}
-    controller: App\Controller\ReactController::resetPassword
-
-
-api_reset_password:
-    path: /api/reset-password
-    controller: App\Controller\PasswordResetController::reset
-    methods: POST
+    prefix: /api
 
