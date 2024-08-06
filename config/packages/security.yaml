@@ -46,6 +46,7 @@ security:
     - { path: ^/api/redirect-to-page-reset-password, roles: PUBLIC_ACCESS }
     - { path: ^/api/admin/register, roles: PUBLIC_ACCESS }
     - { path: ^/api/admin/login, roles: PUBLIC_ACCESS }
+    - { path: ^/api/reservations, roles:  PUBLIC_ACCESS  }
     - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
 
   role_hierarchy:
