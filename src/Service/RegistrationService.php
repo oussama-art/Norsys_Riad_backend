@@ -45,13 +45,12 @@ class RegistrationService
         $user->setCin($userData['cin']);
         $user->setAddress($userData['address']);
         $user->setTele($userData['tele']);
-        $user->setRoles($userData['roles']?? $user->getRoles());
+        $user->setRoles($userData['roles'] ?? $user->getRoles());
 
         // Validate user data
-        if($userData['password'] != $userData['passwordConfirmation']){
+        if ($userData['password'] != $userData['passwordConfirmation']) {
             return new JsonResponse(['message' => 'Passwords do not match'], 400);
         }
-
 
         // Hash the password
         $hashedPassword = $this->passwordHasher->hashPassword(
@@ -60,14 +59,55 @@ class RegistrationService
         );
         $user->setPassword($hashedPassword);
 
+        $errors = $this->userService->validateUser($user);
+        if (!empty($errors)) {
+            return new JsonResponse($errors, 400);
+        }
+
+        $em->persist($user);
+        $em->flush();
+
+        return new JsonResponse(['message' => 'User successfully registered'], 201);
+    }
+
+    public function updateUser(int $userId, array $userData): JsonResponse
+    {
+        $em = $this->doctrine->getManager();
+
+        // Find the user by ID
+        $user = $this->userRepository->find($userId);
+
+        if (!$user) {
+            return new JsonResponse(['message' => 'User not found'], 404);
+        }
+
+        // Update user details
+        $user->setEmail($userData['email']);
+        $user->setUsername($userData['username']);
+        $user->setFirstname($userData['firstname']);
+        $user->setSecondname($userData['secondname']);
+        $user->setCin($userData['cin']);
+        $user->setAddress($userData['address']);
+        $user->setTele($userData['tele']);
+        $user->setRoles($userData['roles'] ?? $user->getRoles());
+
+
+        // Hash the new password if provided
+        if (!empty($userData['password'])) {
+            $hashedPassword = $this->passwordHasher->hashPassword(
+                $user,
+                $userData['password']
+            );
+            $user->setPassword($hashedPassword);
+        }
 
         $errors = $this->userService->validateUser($user);
         if (!empty($errors)) {
             return new JsonResponse($errors, 400);
         }
-        $em->persist($user);
+
         $em->flush();
 
-        return new JsonResponse(['message' => 'User successfully registered'], 201);
+        return new JsonResponse(['message' => 'User successfully updated'], 200);
     }
 }

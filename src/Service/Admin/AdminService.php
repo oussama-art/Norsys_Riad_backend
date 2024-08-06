@@ -35,7 +35,7 @@ class AdminService
     {
         // Ensure the roles are included in the userData
         if (!isset($userData['roles']) || !in_array('ROLE_ADMIN', $userData['roles'])) {
-            return new JsonResponse(['error' => 'Admin role is required.'], JsonResponse::HTTP_BAD_REQUEST);
+            return new JsonResponse(['error' => 'Admin role is required.'], Response::HTTP_BAD_REQUEST);
         }
 
         // Call the RegistrationService to handle user registration
@@ -48,7 +48,7 @@ class AdminService
         $password = $credentials['password'] ?? null;
 
         if (!$username || !$password) {
-            return new JsonResponse(['error' => 'Username and password are required.'], JsonResponse::HTTP_BAD_REQUEST);
+            return new JsonResponse(['error' => 'Username and password are required.'], Response::HTTP_BAD_REQUEST);
         }
 
         $allowedFields = ['username', 'password'];
@@ -81,4 +81,5 @@ class AdminService
             'status' => Response::HTTP_OK
         ]);
     }
+
 }

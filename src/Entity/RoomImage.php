@@ -1,35 +1,31 @@
 <?php
 // src/Entity/RoomImage.php
+
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use App\Controller\RoomImageController;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\RoomImageRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: RoomImageRepository::class)]
 #[Vich\Uploadable]
 #[ApiResource(
     operations: [
-        new Post(
-            uriTemplate: '/room_images',
-            controller: RoomImageController::class,
-            inputFormats: ['multipart' => ['multipart/form-data']],
-            output: false,
-            deserialize: false
-        ),
-        new GetCollection(uriTemplate: '/room_images'),
-        new Get(uriTemplate: '/room_images/{id}'),
+        new Get(),
+        new GetCollection(),
+        new Post(),
+        new Delete(),
         new Patch(),
-        new Delete()
+        new Put(),
     ]
 )]
 class RoomImage
@@ -41,7 +37,7 @@ class RoomImage
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['room:read'])]
+    #[Groups(['room:read', 'room:write'])]
     private ?string $imageName = null;
 
     #[Vich\UploadableField(mapping: 'room_images', fileNameProperty: 'imageName')]
