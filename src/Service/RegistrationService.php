@@ -37,19 +37,16 @@ class RegistrationService
             return new JsonResponse(['message' => 'User with this email or username already exists'], 400);
         }
 
-        $user = new User();
-        $user->setEmail($userData['email']);
-        $user->setUsername($userData['username']);
-        $user->setFirstname($userData['firstname']);
-        $user->setSecondname($userData['secondname']);
-        $user->setCin($userData['cin']);
-        $user->setAddress($userData['address']);
-        $user->setTele($userData['tele']);
-        $user->setRoles($userData['roles'] ?? $user->getRoles());
-
-        // Validate user data
         if ($userData['password'] != $userData['passwordConfirmation']) {
             return new JsonResponse(['message' => 'Passwords do not match'], 400);
+        }
+
+        $user = new User();
+        $this->populateUserData($user, $userData);
+
+        $errors = $this->userService->validateUser($user);
+        if (!empty($errors)) {
+            return new JsonResponse($errors, 400);
         }
 
         // Hash the password
@@ -58,11 +55,6 @@ class RegistrationService
             $userData['password']
         );
         $user->setPassword($hashedPassword);
-
-        $errors = $this->userService->validateUser($user);
-        if (!empty($errors)) {
-            return new JsonResponse($errors, 400);
-        }
 
         $em->persist($user);
         $em->flush();
@@ -81,19 +73,10 @@ class RegistrationService
             return new JsonResponse(['message' => 'User not found'], 404);
         }
 
-        // Update user details
-        $user->setEmail($userData['email']);
-        $user->setUsername($userData['username']);
-        $user->setFirstname($userData['firstname']);
-        $user->setSecondname($userData['secondname']);
-        $user->setCin($userData['cin']);
-        $user->setAddress($userData['address']);
-        $user->setTele($userData['tele']);
-        $user->setRoles($userData['roles'] ?? $user->getRoles());
+        $this->populateUserData($user, $userData);
 
-
-        // Hash the new password if provided
         if (!empty($userData['password'])) {
+            // Hash the new password if provided
             $hashedPassword = $this->passwordHasher->hashPassword(
                 $user,
                 $userData['password']
@@ -109,5 +92,24 @@ class RegistrationService
         $em->flush();
 
         return new JsonResponse(['message' => 'User successfully updated'], 200);
+    }
+
+    private function populateUserData(User $user, array $userData): void
+    {
+        $user->setEmail($userData['email']);
+        $user->setUsername($userData['username']);
+        $user->setFirstname($userData['firstname']);
+        $user->setSecondname($userData['secondname']);
+        $user->setCin($userData['cin']);
+        $user->setAddress($userData['address']);
+        $user->setTele($userData['tele']);
+
+        $roles = $userData['roles'] ?? [];
+        if (empty($roles)) {
+            $roles = ['ROLE_USER'];
+        }
+        $user->setRoles($roles);
+
+        $user->setPassword($userData['password']);
     }
 }

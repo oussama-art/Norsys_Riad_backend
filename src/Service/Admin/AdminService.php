@@ -66,7 +66,7 @@ class AdminService
         }
 
         if (!in_array('ROLE_ADMIN', $user->getRoles(), true)) {
-            return new JsonResponse(['message' => 'Access denied', 'status' => Response::HTTP_FORBIDDEN]);
+            return new JsonResponse(['message' => 'Invalid credentials', 'status' => Response::HTTP_FORBIDDEN]);
         }
 
         if (!$this->passwordEncoder->isPasswordValid($user, $password)) {

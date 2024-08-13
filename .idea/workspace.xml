@@ -5,35 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ab4aced6-a985-4d81-a677-7863718ed4fc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Controller/Riad/RiadController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Service/RiadService.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/Norsys_Riad_backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Norsys_Riad_backend.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/services.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/riads/moroccan-serving-mint-tea-traditional-way-66b044b8dc65e769181939.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/rooms/moroccan-serving-mint-tea-traditional-way-66b2186f5ee91448555800.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/rooms/lamps-arab-restaurant-66ae6df8487ec152597781.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/rooms/moroccan-africa-interior-ornate-pool-66b0338cf3684149822180.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/riads/moroccan-africa-interior-ornate-pool-66b2168c60cdd939677363.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/rooms/moroccan-serving-mint-tea-traditional-way-66b0435a44127433601068.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/Admin/RegistrationAdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Admin/RegistrationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Auth/LoginController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/LogoutController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Auth/LogoutController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/PasswordResetController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/PasswordReset/PasswordResetController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/PasswordResetRequestController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/PasswordReset/PasswordResetRequestController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ReactController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/PasswordReset/ReactController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/RegistrationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Auth/RegistrationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/RiadController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/RiadImageController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Riad/RiadImageController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/RoomController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Room/RoomController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/RoomImageController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Room/RoomImageController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/TokenController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Token/TokenController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/UpdatePasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/PasswordReset/UpdatePasswordController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/UpdateUserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/User/UpdateUserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/User/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Riad.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Riad.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/RoomImage.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/RoomImage.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/nelmio_cors.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/nelmio_cors.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20240802081409.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20240802082325.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20240805123514.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20240806081958.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20240806084525.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20240806101021.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20240806103947.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/riads/fountain-66b044c3783f1873596479.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/riads/lamps-arab-restaurant-1-66ae7b5c6cf3a174419360.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/riads/lamps-arab-restaurant-2-66ae6dceafc2b436486093.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/riads/moroccan-africa-interior-ornate-pool-66b0988519c09967248914.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/riads/moroccan-africa-interior-ornate-pool-66b2168c60cdd939677363.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/rooms/moroccan-serving-mint-tea-traditional-way-66b2186f5ee91448555800.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ReservationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ReservationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/Token/TokenController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Token/TokenController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/User/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/User/UserController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Security/UsersAuthenticator.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Service/Admin/AdminService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/Admin/AdminService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/RegistrationService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/RegistrationService.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -209,7 +204,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat__EndpointRiad-Room__/c/8c1XZfXd&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;sprint__1&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Oussama/Desktop/riad/upload image/Norsys_Riad_backend&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -217,6 +212,11 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;java.sql.Driver&quot;
+    ]
   }
 }</component>
   <component name="RunManager">
@@ -251,6 +251,13 @@
       <workItem from="1722784026206" duration="34363000" />
       <workItem from="1722933993974" duration="1652000" />
       <workItem from="1722935691605" duration="9361000" />
+      <workItem from="1723018778136" duration="258000" />
+      <workItem from="1723019182572" duration="18818000" />
+      <workItem from="1723116460473" duration="21814000" />
+      <workItem from="1723200797926" duration="13986000" />
+      <workItem from="1723372844714" duration="8914000" />
+      <workItem from="1723458983019" duration="11111000" />
+      <workItem from="1723549769117" duration="772000" />
     </task>
     <servers />
   </component>

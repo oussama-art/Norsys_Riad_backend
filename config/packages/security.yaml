@@ -50,6 +50,8 @@ security:
     - { path: ^/api/rooms, roles: PUBLIC_ACCESS }
     - { path: ^/api/reservations, roles:  PUBLIC_ACCESS  }
     - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/users/\d+/archive, roles: ROLE_ADMIN }
+    - { path: ^/api/users/\d+/activate, roles: ROLE_ADMIN }
 
   role_hierarchy:
     ROLE_ADMIN: ROLE_USER  # ROLE_ADMIN includes ROLE_USER permissions
