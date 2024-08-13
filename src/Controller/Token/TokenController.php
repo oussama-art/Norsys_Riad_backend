@@ -45,6 +45,11 @@ class TokenController extends AbstractController
             if ($expirationTime) {
                 // Convert the expiration timestamp to a readable date format (optional)
                 $expirationTime = (new \DateTime())->setTimestamp($expirationTime)->format(\DateTime::ATOM);
+
+                // Check if token is expired
+                if ($expirationTime < (new \DateTime())->format(\DateTime::ATOM)) {
+                    return new JsonResponse(['valid' => false, 'role' => null, 'expires_at' => $expirationTime], 401);
+                }
             }
 
             if ($admin && !$isAdmin) {
