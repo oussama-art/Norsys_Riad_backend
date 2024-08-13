@@ -5,30 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ab4aced6-a985-4d81-a677-7863718ed4fc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Norsys_Riad_backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Norsys_Riad_backend.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/nelmio_cors.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/nelmio_cors.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20240802081409.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20240802082325.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20240805123514.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20240806081958.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20240806084525.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20240806101021.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20240806103947.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/riads/fountain-66b044c3783f1873596479.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/riads/lamps-arab-restaurant-1-66ae7b5c6cf3a174419360.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/riads/lamps-arab-restaurant-2-66ae6dceafc2b436486093.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/riads/moroccan-africa-interior-ornate-pool-66b0988519c09967248914.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/riads/moroccan-africa-interior-ornate-pool-66b2168c60cdd939677363.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/rooms/moroccan-serving-mint-tea-traditional-way-66b2186f5ee91448555800.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ReservationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ReservationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/lexik_jwt_authentication.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/lexik_jwt_authentication.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/Token/TokenController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Token/TokenController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/User/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/User/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Security/UsersAuthenticator.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/Admin/AdminService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/Admin/AdminService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/RegistrationService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/RegistrationService.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,24 +180,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;sprint__1&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Oussama/Desktop/riad/upload image/Norsys_Riad_backend&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "feat__archivage-account-user__c/xp516j7M",
+    "last_opened_file_path": "C:/Users/Oussama/Desktop/riad/upload image/Norsys_Riad_backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;java.sql.Driver&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "java.sql.Driver"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Main" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml.dist" scope="XML" use_alternative_configuration_file="true" />
@@ -257,7 +236,7 @@
       <workItem from="1723200797926" duration="13986000" />
       <workItem from="1723372844714" duration="8914000" />
       <workItem from="1723458983019" duration="11111000" />
-      <workItem from="1723549769117" duration="772000" />
+      <workItem from="1723549769117" duration="6619000" />
     </task>
     <servers />
   </component>
