@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 
 class ReservationController extends AbstractController
 {
-    #[Route('/api/reservation', methods: ['POST'])]
+    #[Route('/reservation', methods: ['POST'])]
     public function createReservation(Request $request, EntityManagerInterface $entityManager, LoggerInterface $logger): Response
     {
         $data = json_decode($request->getContent(),

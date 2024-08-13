@@ -30,7 +30,7 @@ class TokenController extends AbstractController
         $admin = $request->request->get('admin', false);
 
         if (!$authorizationHeader || !str_starts_with($authorizationHeader, 'Bearer ')) {
-            return new JsonResponse(['valid' => false, 'role' => null], 401);
+            return new JsonResponse(['valid' => false, 'role' => null, 'expires_at' => null], 401);
         }
 
         $tokenString = substr($authorizationHeader, 7); // Extract token after 'Bearer '
@@ -41,15 +41,30 @@ class TokenController extends AbstractController
             $roles = $payload['roles'] ?? [];
             $isAdmin = in_array('ROLE_ADMIN', $roles, true);
 
-            if ($admin && !$isAdmin) {
-                return new JsonResponse(['valid' => false, 'role' => 'ROLE_USER'], 403);
+            $expirationTime = $payload['exp'] ?? null;
+            if ($expirationTime) {
+                // Convert the expiration timestamp to a readable date format (optional)
+                $expirationTime = (new \DateTime())->setTimestamp($expirationTime)->format(\DateTime::ATOM);
             }
 
-            return new JsonResponse(['valid' => true, 'role' => $isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER'], 200);
+            if ($admin && !$isAdmin) {
+                return new JsonResponse([
+                    'valid' => false,
+                    'role' => 'ROLE_USER',
+                    'expires_at' => $expirationTime
+                ], 403);
+            }
+
+            return new JsonResponse([
+                'valid' => true,
+                'role' => $isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER',
+                'expires_at' => $expirationTime
+            ], 200);
         } catch (JWTDecodeFailureException $e) {
-            return new JsonResponse(['valid' => false, 'role' => null], 401);
+            return new JsonResponse(['valid' => false, 'role' => null, 'expires_at' => null], 401);
         }
     }
+
 
     #[Route('/me', name: 'api_me', methods: ['GET'])]
     public function getUserInfo(): JsonResponse
