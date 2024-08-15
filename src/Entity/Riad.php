@@ -1,5 +1,5 @@
 <?php
-
+// src/Entity/Riad.php
 namespace App\Entity;
 
 use App\Repository\RiadRepository;
@@ -32,9 +32,13 @@ class Riad
     #[ORM\OneToMany(mappedBy: 'riad', targetEntity: Room::class, orphanRemoval: true)]
     private Collection $rooms;
 
+    #[ORM\OneToMany(mappedBy: 'riad', targetEntity: RiadImage::class, orphanRemoval: true)]
+    private Collection $images;
+
     public function __construct()
     {
         $this->rooms = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -114,6 +118,36 @@ class Riad
             // set the owning side to null (unless already changed)
             if ($room->getRiad() === $this) {
                 $room->setRiad(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RiadImage>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(RiadImage $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setRiad($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(RiadImage $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getRiad() === $this) {
+                $image->setRiad(null);
             }
         }
 

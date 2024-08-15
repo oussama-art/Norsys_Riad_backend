@@ -9,12 +9,24 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use ApiPlatform\Metadata\GetCollection;
+use App\Controller\RoomController;
+
 
 #[ORM\Entity(repositoryClass: RoomRepository::class)]
 #[Vich\Uploadable]
 #[ApiResource(
     normalizationContext: ['groups' => ['room:read']],
     denormalizationContext: ['groups' => ['room:write']],
+    operations: [
+
+        new GetCollection(
+            uriTemplate: '/rooms/available/{checkIn}/{checkOut}/{guests}',
+            controller: RoomController::class . '::findAvailableRoom',
+            read: false,
+            name: 'find_available_rooms',
+        ),
+    ]
 )]
 class Room
 {
@@ -49,23 +61,19 @@ class Room
     #[Groups(['room:read'])]
     private Collection $images;
 
-    #[ORM\OneToOne(targetEntity: Reservation::class, mappedBy: 'room', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'room')]
     #[Groups(['room:read'])]
-    private ?Reservation $reservation = null;
+    private Collection $reservations;
 
-    public function getReservation(): ?Reservation
-    {
-        return $this->reservation;
-    }
 
-    public function setReservation(?Reservation $reservation): void
-    {
-        $this->reservation = $reservation;
-    }
+
+   
 
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -151,6 +159,34 @@ class Room
         if ($this->images->removeElement($image)) {
             if ($image->getRoom() === $this) {
                 $image->setRoom(null);
+            }
+        }
+
+        return $this;
+    }
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setRoom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            if ($reservation->getRoom() === $this) {
+                $reservation->setRoom(null);
             }
         }
 

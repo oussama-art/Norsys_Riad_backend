@@ -40,14 +40,14 @@ class Reservation
 
     #[ORM\Column(type: "decimal", scale: 2, nullable: true)]
     private ?float $discount = null;
-
-    #[ORM\OneToOne(targetEntity: Room::class, inversedBy: 'reservation')]
+    
+    #[ORM\ManyToOne(targetEntity: Room::class, inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Room $room;
+    private ?Room $room = null;
 
-    #[ORM\OneToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user;
+    private ?User $user = null;
 
     public function getId(): ?int
     {

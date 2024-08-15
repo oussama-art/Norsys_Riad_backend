@@ -122,22 +122,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Token::class, mappedBy: 'user', cascade: ['remove'], orphanRemoval: true)]
     private Collection $tokens;
 
-    #[ORM\OneToOne(targetEntity: Reservation::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
-    private ?Reservation $reservation = null;
-
-    public function getReservation(): ?Reservation
-    {
-        return $this->reservation;
-    }
-
-    public function setReservation(?Reservation $reservation): void
-    {
-        $this->reservation = $reservation;
-    }
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user')]
+    private Collection $reservations;
 
     public function __construct()
     {
         $this->tokens = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     // Getter and setter methods for the new properties
@@ -283,5 +274,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getTokens(): Collection
     {
         return $this->tokens;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            if ($reservation->getUser() === $this) {
+                $reservation->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

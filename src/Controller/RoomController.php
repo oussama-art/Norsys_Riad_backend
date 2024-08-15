@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use DateTimeImmutable; // Ensure this is from the global namespace
+
 
 class RoomController extends AbstractController
 {
@@ -52,4 +54,25 @@ class RoomController extends AbstractController
         $data = $this->serializer->normalize($room, null, ['groups' => 'room:read']);
         return new JsonResponse($data, Response::HTTP_CREATED);
     }
+    
+    #[Route('/rooms/available/{checkIn}/{checkOut}/{guests}', name: 'find_available_rooms', methods: ['GET'])]
+    public function findAvailableRoom(RoomRepository $roomRepository, SerializerInterface $serializer, \DateTimeImmutable $checkIn, \DateTimeImmutable $checkOut, int $guests): Response
+    {
+        $availableRooms = $roomRepository->findChambresDisponibles($checkIn, $checkOut, $guests);
+
+        $jsonContent = $serializer->serialize($availableRooms, 'json', ['groups' => 'room:read']);
+
+        return new Response($jsonContent, 200, ['Content-Type' => 'application/json']);
+    }
+
+    #[Route('/rooms/{id}/reservations', name: 'get_room_reservations', methods: ['GET'])]
+    public function getRoomReservations(int $id, ReservationRepository $reservationRepository, SerializerInterface $serializer): JsonResponse
+    {
+        $today = new DateTimeImmutable();
+        $reservations = $reservationRepository->findReservationsByRoomAndDate($id, $today);
+
+        $data = $serializer->serialize($reservations, 'json', ['groups' => 'reservation:read']);
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
+    }
+
 }
